@@ -22,5 +22,4 @@ public:
 	int GetLen() { return infix.length(); } 
 	int CountVal(); 
 };
-
 #endif

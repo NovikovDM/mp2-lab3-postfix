@@ -8,7 +8,6 @@ int main()
 {
   string expression;
   double res;
-
   setlocale(LC_ALL, "Russian");
 
   cout << "Введите арифметическое выражение: ";

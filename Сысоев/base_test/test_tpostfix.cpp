@@ -25,7 +25,6 @@ TEST(TPostfix, check_CountValue)
 	TPostfix p("a+b-c+d");
 	EXPECT_EQ(4, p.CountVal());
 }
-
 TEST(TPostfix, check_postfix1)
 {
 	TPostfix p("a + b * c");
