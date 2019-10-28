@@ -23,7 +23,7 @@ TEST(TPostfix, get_postfix_form)
 TEST(TPostfix, check_CountValue)
 {
 	TPostfix p("a+b-c+d");
-	EXPECT_EQ(4, p.CountVal());
+	EXPECT_EQ(4, p.CountLet());
 }
 TEST(TPostfix, check_postfix1)
 {
@@ -116,5 +116,22 @@ TEST(TPostfix, check_calculate4)
 	int res;
 	res = p.Calculate(values);
 	EXPECT_EQ(res, 5);
+}
+
+TEST(TPostfix, check_calculate5)
+{
+	TPostfix p("a + a");
+	p.ToPostfix();
+	double* values;
+	int CountVal = p.CountVal();
+	int CountLetter = p.CountLet();
+	values = new double[CountLetter];
+	for (int i = 0; i < CountLetter; i++)
+	{
+		values[i] = 2;
+	}
+	int res;
+	res = p.Calculate(values);
+	EXPECT_EQ(res, 4);
 }
 

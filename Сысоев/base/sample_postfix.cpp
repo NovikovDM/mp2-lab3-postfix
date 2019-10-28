@@ -18,9 +18,9 @@ int main()
   postfix.ToPostfix();
   cout << "Постфиксная форма: " << postfix.GetPostfix() << endl;
   double* value;
-  int Count = postfix.CountVal();
-  value = new double[Count];
-  for (int i = 0; i < Count; i++) 
+  int tmp = postfix.CountLet();
+  value = new double[tmp];
+  for (int i = 0; i < tmp; i++) 
   {
 	  cin >> value[i];
   }
