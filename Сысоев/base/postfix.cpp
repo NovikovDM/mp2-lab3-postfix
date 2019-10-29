@@ -30,7 +30,24 @@ string TPostfix::ToPostfix()
 					operation.Push(infix[i]);
 				else
 				{
-					if (Priority(infix[i]) <= Priority(operation.GetTop()))
+					if (Priority(infix[i]) == Priority(operation.GetTop()))
+					{
+						if (infix[i] == '(') operation.Push(infix[i]);
+						else if (infix[i] == ')')
+						{
+							while (operation.GetTop() != '(')
+							{
+								postfix += operation.Pop();
+							}
+							operation.Pop();
+						}
+						else
+						{
+							postfix += operation.Pop();
+							operation.Push(infix[i]);
+						}
+					}
+					else if (Priority(infix[i]) < Priority(operation.GetTop()))
 					{
 						if (infix[i] == '(') operation.Push(infix[i]);
 						else if (infix[i] == ')')
@@ -57,7 +74,6 @@ string TPostfix::ToPostfix()
 				}
 			}
 	}
-
 		while (!operation.IsEmpty())
 		{
 			postfix += operation.Pop();
@@ -68,6 +84,7 @@ string TPostfix::ToPostfix()
 int TPostfix::CountVal()
 {
 	int count = 0;
+	string t = "";
 	for (int i = 0; i < LenInfix; i++)
 	{
 		if (isalpha(infix[i]))
@@ -96,11 +113,43 @@ double TPostfix::Calculate(double *_values)
 	TStack<double> Value(CountVal());
 	double val1, val2;
 	int j = 0;
+	int Cnt = CountVal();
+	double* value1;
+	value1 = new double[Cnt]();
+	if (Cnt == CountLet()) //случай, когда нет повторяющихся переменных
+	{
+		for (int i = 0; i < Cnt; i++)
+		{
+			value1[i] = _values[i];
+		}
+	}
+	else // случай,когда есть повторяющиеся переменные
+	{
+		string t = letters();
+		int k = 0;
+		for (int i = 0; i < Cnt; i++)
+		{
+			if (isalpha(t[i]))
+				value1[i] = _values[k++];
+			for (int j = i + 1; j < Cnt; j++)
+			{
+				if (isalpha(t[j]))
+				{
+					if ((t[i] == t[j]) && (t[i] != ' '))
+					{
+						value1[j] = value1[i];
+						t[j] = ' ';
+					}
+				}
+			}
+		}
+	}
+	j = 0;
 	for (int i = 0; i < postfix.length(); i++)
 	{
 		if (isalpha(postfix[i]))
 		{
-			Value.Push(_values[j++]);
+			Value.Push(value1[j++]);
 		}
 		else
 		{
@@ -125,4 +174,40 @@ double TPostfix::Calculate(double *_values)
 		}
 	}
 	return Value.GetTop();
+}
+
+string TPostfix::letters()
+{
+	string tmp = "";
+	for (int i = 0; i < LenInfix; i++)
+	{
+		if (isalpha(infix[i])) tmp += infix[i];
+	}
+	return tmp;
+}
+
+int TPostfix::CountLet()
+{
+	int res = 0;
+	string t = "";
+	for (int i = 0; i < LenInfix; i++)
+	{
+		if (isalpha(infix[i]))
+		{
+			res++;
+			t += infix[i];
+		}
+	}
+	for (int i = 0; i < t.length(); i++)
+	{
+		for (int j = i + 1; j < t.length(); j++)
+		{
+			if ((t[i] == t[j]) && (t[i] != ' '))
+			{
+				res--;
+				t[j] = ' ';
+			}
+		}
+	}
+	return res;
 }

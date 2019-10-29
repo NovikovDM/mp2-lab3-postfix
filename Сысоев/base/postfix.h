@@ -21,6 +21,7 @@ public:
 	int Priority(char t); 
 	int GetLen() { return infix.length(); } 
 	int CountVal(); 
+	int CountLet();
+	string letters();
 };
-
 #endif
